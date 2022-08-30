@@ -1,29 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 
-function App() {
- const [count, setCount] =  useState( 4)
- const [theme, setTheme] = useState('blue')
- 
- function decrementCount() {
- setCount(prevCount => prevCount -1)
-}
-  
-function incrementCount() {
+export default function App() {
+ const [resourceType, setResourceType] = useState('posts')
+ const [items, setItems] = useState([])
+ console.log('render')
+ useEffect(() => {
+  // eslint-disable-next-line no-template-curly-in-string
+  fetch('https://jsonplaceholder.typicode.com/${resourceType}')
+  .then(response => response.json())
+  .then(json => setItems(json))
 
-   setCount(prevCount => prevCount + 1)
-   setTheme('red')
-}
+
+ }, [resourceType])
+ 
+ 
+
 
   return (
     <div >
-      <button onClick={decrementCount}>-</button>
-      <span>{count}</span>
-      <span>{theme}</span>
-      <button onClick={incrementCount}>+</button>
+      <button onClick={() => setResourceType('posts')}>Posts</button>
+      <button onClick={() => setResourceType('users')}>Users</button>
+      <button onClick={() => setResourceType('comments')}>Comments</button>
+      
+      <hi>{resourceType}</hi>
+     {items.map(items => {
+
+      return <pre>{JSON.stringify(items)}</pre>
+     })}
+     
     </div>
   )
-}
+  }
 
-export default App;
+
